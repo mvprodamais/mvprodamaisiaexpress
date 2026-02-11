@@ -1,0 +1,232 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║         🚌 BOT DE PASSAGENS DE ÔNIBUS PARA WHATSAPP - MVP                ║
+║                                                                            ║
+║                        ✅ PRONTO PARA PRODUÇÃO                            ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+📋 RESUMO DO PROJETO
+═══════════════════════════════════════════════════════════════════════════
+
+Este é um MVP (Mínimo Produto Viável) de um bot de WhatsApp para consulta e
+pré-reserva de passagens de ônibus. O bot funciona 100% dentro do WhatsApp,
+sem necessidade de site ou aplicativo adicional.
+
+🎯 FUNCIONALIDADES PRINCIPAIS
+═══════════════════════════════════════════════════════════════════════════
+
+✅ Fluxo Conversacional Completo
+   - Menu inicial com 2 opções
+   - Seleção de origem (3 cidades)
+   - Seleção de destino (3 cidades)
+   - Tipo de viagem (ida ou ida e volta)
+   - Data de viagem (formato DD/MM)
+   - Período (manhã/tarde/noite)
+   - Número de assentos (1-5)
+   - Tipo de poltrona (convencional/semi-leito/leito)
+
+✅ Busca de Viagens
+   - Exibição de 3 opções de viagem
+   - Horários, preços e viações
+   - Filtragem por período
+
+✅ Pré-Reserva
+   - Código numérico (4 dígitos)
+   - Código alfanumérico (RM-XXXXXXXX)
+   - QR Code em PNG
+   - Validade de 10 minutos
+
+✅ Integração WHAPI
+   - Recebimento de mensagens via webhook
+   - Envio de mensagens de texto
+   - Envio de imagens (QR Code)
+
+✅ Gerenciamento de Sessão
+   - Controle por número de telefone
+   - Sessões em memória
+   - Timeout de 30 minutos
+
+📁 ESTRUTURA DO PROJETO
+═══════════════════════════════════════════════════════════════════════════
+
+whatsapp-bus-booking/
+├── server.js                 # Servidor Express principal
+├── config.js                 # Configurações e constantes
+├── sessionManager.js         # Gerenciamento de sessões
+├── conversationFlow.js       # Lógica do fluxo conversacional
+├── reservationManager.js     # Pré-reservas e QR Codes
+├── whapiManager.js          # Integração com WHAPI
+├── package.json             # Dependências
+├── .env                      # Variáveis de ambiente (com token)
+├── .env.example              # Exemplo de .env
+├── .gitignore                # Arquivos a ignorar
+├── Procfile                  # Para Heroku/Render
+├── railway.json              # Para Railway
+├── README.md                 # Documentação técnica
+├── QUICKSTART.md             # Guia rápido
+├── DEPLOY.md                 # Instruções de deploy
+├── TESTING.md                # Como testar
+├── GET_WHAPI_TOKEN.md        # Como obter token
+├── ENTREGA_FINAL.md          # Instruções finais
+└── qr_codes/                 # Pasta para QR Codes gerados
+
+🚀 COMO FAZER DEPLOY
+═══════════════════════════════════════════════════════════════════════════
+
+OPÇÃO 1: Railway (Recomendado)
+────────────────────────────────
+
+1. Criar repositório GitHub
+   git init
+   git add .
+   git commit -m "WhatsApp Bus Booking Bot"
+   git remote add origin https://github.com/seu-usuario/whatsapp-bus-booking
+   git push -u origin main
+
+2. Acessar https://railway.app
+3. Clicar "New Project" → "Deploy from GitHub"
+4. Selecionar repositório
+5. Clicar "Deploy Now"
+6. Aguardar 2-3 minutos
+
+7. Configurar variáveis:
+   - WHAPI_TOKEN: 0W3kwqeFeP6DLgMA5ASn0T2Wvs7xj3u4
+   - NODE_ENV: production
+
+8. Copiar URL pública (ex: https://seu-projeto.railway.app)
+
+OPÇÃO 2: Render
+────────────────
+
+1. Preparar repositório GitHub (mesmos passos acima)
+2. Acessar https://render.com
+3. Clicar "New Web Service"
+4. Conectar GitHub
+5. Preencher:
+   - Name: whatsapp-bus-booking
+   - Build Command: npm install
+   - Start Command: node server.js
+6. Configurar variáveis de ambiente
+7. Deploy automático
+
+OPÇÃO 3: Fly.io
+────────────────
+
+1. Instalar CLI: curl -L https://fly.io/install.sh | sh
+2. Login: flyctl auth login
+3. Deploy: flyctl launch
+4. Configurar secrets: flyctl secrets set WHAPI_TOKEN="..."
+5. Deploy: flyctl deploy
+
+🔧 CONFIGURAR WEBHOOK NO WHAPI
+═══════════════════════════════════════════════════════════════════════════
+
+1. Acessar https://whapi.cloud
+2. Ir para Webhooks
+3. Adicionar webhook:
+   - URL: https://seu-dominio.com/whapi/webhook
+   - Events: messages
+4. Salvar
+
+5. Conectar número de WhatsApp Business
+6. Testar webhook
+
+📱 TESTAR BOT
+═══════════════════════════════════════════════════════════════════════════
+
+1. Abrir WhatsApp
+2. Enviar mensagem para seu número
+3. Bot responde com menu
+4. Seguir fluxo conversacional
+5. Receber pré-reserva com QR Code
+
+🔑 VARIÁVEIS DE AMBIENTE
+═══════════════════════════════════════════════════════════════════════════
+
+PORT                 Porta do servidor (padrão: 3000)
+WHAPI_TOKEN          Token de autenticação WHAPI
+NODE_ENV             Ambiente (development/production)
+
+📊 ENDPOINTS DISPONÍVEIS
+═══════════════════════════════════════════════════════════════════════════
+
+GET  /health                 Health check
+GET  /status                 Status do bot
+GET  /config                 Informações de configuração
+GET  /qr/:codigo             Servir imagem do QR Code
+GET  /whapi/webhook          Verificação de webhook
+POST /whapi/webhook          Receber mensagens
+
+💡 DADOS MOCK
+═══════════════════════════════════════════════════════════════════════════
+
+Cidades:
+- São Paulo (SP)
+- Rio de Janeiro (RJ)
+- Belo Horizonte (BH)
+
+Viações:
+- Viação Cometa
+- Viação 1001
+- Viação Gontijo
+
+Horários:
+- 06:00 - Convencional - R$ 89.90
+- 12:30 - Semi-leito - R$ 129.90
+- 19:00 - Leito - R$ 169.90
+
+Períodos:
+- Manhã: 06:00-12:00
+- Tarde: 12:00-18:00
+- Noite: 18:00-23:59
+
+Tipos de Poltrona:
+- Convencional: R$ 0
+- Semi-leito: R$ 40
+- Leito: R$ 80
+
+🎯 PRÓXIMOS PASSOS (Opcional)
+═══════════════════════════════════════════════════════════════════════════
+
+1. Customizar dados (cidades, viações, preços)
+2. Adicionar banco de dados (MongoDB/PostgreSQL)
+3. Persistir reservas
+4. Integrar com API real de viações
+5. Adicionar autenticação de usuários
+6. Melhorar UI com mais emojis
+7. Adicionar suporte a múltiplos idiomas
+
+📞 SUPORTE
+═══════════════════════════════════════════════════════════════════════════
+
+WHAPI Docs:    https://whapi.cloud/docs
+Railway Docs:  https://railway.app/docs
+Render Docs:   https://render.com/docs
+Fly.io Docs:   https://fly.io/docs
+Node.js:       https://nodejs.org/docs
+
+✅ CHECKLIST DE DEPLOY
+═══════════════════════════════════════════════════════════════════════════
+
+- [ ] Repositório GitHub criado
+- [ ] Código enviado para GitHub
+- [ ] Deploy realizado (Railway/Render/Fly.io)
+- [ ] Variáveis de ambiente configuradas
+- [ ] Webhook configurado no WHAPI
+- [ ] Número de WhatsApp conectado
+- [ ] Health check funcionando
+- [ ] Webhook verificado
+- [ ] Teste completo no WhatsApp
+- [ ] QR Code gerado e enviado
+- [ ] Pré-reserva criada
+
+═══════════════════════════════════════════════════════════════════════════
+
+🎉 BOT PRONTO PARA APRESENTAÇÃO EXECUTIVA!
+
+Desenvolvido em: 25 de Janeiro de 2026
+Status: ✅ PRONTO PARA PRODUÇÃO
+Token WHAPI: 0W3kwqeFeP6DLgMA5ASn0T2Wvs7xj3u4
+
+═══════════════════════════════════════════════════════════════════════════

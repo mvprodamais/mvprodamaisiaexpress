@@ -1,0 +1,27 @@
+{
+  "name": "mvprodamaisiaexpress",
+  "version": "1.0.0",
+  "description": "Bot de WhatsApp para consulta e pré-reserva de passagens de ônibus",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "passagens",
+    "onibus",
+    "reserva"
+  ],
+  "author": "mvprodamais",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "qrcode": "^1.5.3",
+    "uuid": "^9.0.1",
+    "dotenv": "^17.2.4"
+  }
+}
