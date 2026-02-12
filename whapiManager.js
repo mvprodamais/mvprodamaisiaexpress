@@ -15,32 +15,54 @@ const api = axios.create({
 export class WhapiManager {
   static async sendMessage(phoneNumber, message) {
     try {
+      console.log('\n📨 === INICIANDO ENVIO DE MENSAGEM ===');
+      console.log('Token configurado:', !!CONFIG.WHAPI_TOKEN);
+      console.log('Token length:', CONFIG.WHAPI_TOKEN?.length || 0);
+      
       if (!CONFIG.WHAPI_TOKEN) {
         console.error('❌ WHAPI_TOKEN não configurado');
         return false;
       }
 
-      // Formatar número: remover caracteres especiais
+      // Formatar número: remover caracteres especiais e adicionar @s.whatsapp.net
       const formattedPhone = phoneNumber.replace(/\D/g, '');
       
-      console.log(`📤 Enviando mensagem para ${formattedPhone}...`);
-      console.log(`📝 Mensagem: ${message}`);
+      console.log(`📤 Enviando mensagem para: ${formattedPhone}`);
+      console.log(`📝 Conteúdo: ${message}`);
+      console.log(`🔗 Base URL: ${CONFIG.WHAPI_BASE_URL}`);
+      console.log(`📍 Endpoint: /messages/text`);
 
-      // Usar endpoint correto do WHAPI com formato correto
-      const response = await api.post('/messages/text', {
+      // Preparar payload
+      const payload = {
         typing_time: 0,
         to: formattedPhone,
         body: message,
+      };
+
+      console.log('📦 Payload:', JSON.stringify(payload, null, 2));
+      console.log('🔑 Headers:', {
+        'Authorization': `Bearer ${CONFIG.WHAPI_TOKEN?.substring(0, 10)}...`,
+        'Content-Type': 'application/json',
       });
 
-      console.log(`✅ Mensagem enviada com sucesso para ${formattedPhone}`);
-      console.log(`📊 Resposta:`, response.data);
+      // Fazer request
+      const response = await api.post('/messages/text', payload);
+
+      console.log(`✅ Mensagem enviada com sucesso!`);
+      console.log(`📊 Status: ${response.status}`);
+      console.log(`📊 Resposta:`, JSON.stringify(response.data, null, 2));
+      console.log('=== FIM DO ENVIO ===\n');
       return true;
     } catch (error) {
-      console.error('❌ Erro ao enviar mensagem via WHAPI:');
-      console.error('Status:', error.response?.status);
-      console.error('Dados:', error.response?.data);
-      console.error('Mensagem:', error.message);
+      console.error('\n❌ === ERRO AO ENVIAR MENSAGEM ===');
+      console.error('Status HTTP:', error.response?.status);
+      console.error('Dados de erro:', JSON.stringify(error.response?.data, null, 2));
+      console.error('Mensagem de erro:', error.message);
+      console.error('Config:', {
+        baseURL: CONFIG.WHAPI_BASE_URL,
+        hasToken: !!CONFIG.WHAPI_TOKEN,
+      });
+      console.error('=== FIM DO ERRO ===\n');
       return false;
     }
   }
